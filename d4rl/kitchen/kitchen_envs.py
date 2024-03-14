@@ -158,7 +158,7 @@ class KitchenBase(KitchenTaskRelaxV1):
         a,
         render_every_step=False,
         render_mode="rgb_array",
-        render_im_shape=(1000, 1000),
+        render_im_shape=(256, 256),
     ):
         obs, reward, done, env_info = super(KitchenBase, self).step(
             a,
