@@ -36,6 +36,7 @@ class KitchenBase(KitchenTaskRelaxV1):
     def __init__(self, dense=True, use_combined_action_space=False, **kwargs):
         self.tasks_to_complete = set(self.TASK_ELEMENTS)
         self.dense = dense
+        self.rendered_goal = False
         super(KitchenBase, self).__init__(**kwargs)
         combined_action_space_low = -1.4 * np.ones(self.max_arg_len)
         combined_action_space_high = 1.4 * np.ones(self.max_arg_len)
@@ -57,11 +58,28 @@ class KitchenBase(KitchenTaskRelaxV1):
                 )
                 self.action_space = Box(act_lower, act_upper, dtype=np.float32)
 
+    def render_goal(self, goalname):
+        if self.rendered_goal:
+            return self.rendered_goal_obj
+        backup_qpos = self.sim.data.qpos.copy()
+        backup_qvel = self.sim.data.qvel.copy()
+        qpos = self.init_qpos.copy()
+        qpos[OBS_ELEMENT_INDICES[goalname]] = OBS_ELEMENT_GOALS[goalname]
+        self.set_state(qpos, np.zeros(len(self.init_qvel)))
+        goal_obs = self.render('rgb_array', width=self.imwidth, height=self.imheight)
+        self.set_state(backup_qpos, backup_qvel)
+        self.rendered_goal = True
+        self.rendered_goal_obj = goal_obs
+        return goal_obs
+    
+    def reset(self):
+        self.rendered_goal = False
+        return super(KitchenBase, self).reset()
+    
     def _get_obs(self):
         t, qp, qv, obj_qp, obj_qv = self.robot.get_obs(
             self, robot_noise_ratio=self.robot_noise_ratio
         )
-
         self.obs_dict = {}
         self.obs_dict["t"] = t
         self.obs_dict["qp"] = qp
@@ -70,8 +88,10 @@ class KitchenBase(KitchenTaskRelaxV1):
         self.obs_dict["obj_qv"] = obj_qv
         self.obs_dict["goal"] = self.goal
         if self.image_obs:
-            img = self.render(mode="rgb_array")
-            img = img.transpose(2, 0, 1).flatten()
+            img = self.render(mode="rgb_array",
+                    width=self.imwidth, height=self.imheight)[..., None]
+            # img = img.transpose(2, 0, 1).flatten()
+            
             if self.proprioception:
                 if not self.initializing:
                     proprioceptive_obs = np.concatenate(
@@ -86,7 +106,7 @@ class KitchenBase(KitchenTaskRelaxV1):
                     return np.concatenate((img, proprioceptive_obs))
                 else:
                     return img
-            return img
+            return {'image': img}
 
         else:
             return np.concatenate(

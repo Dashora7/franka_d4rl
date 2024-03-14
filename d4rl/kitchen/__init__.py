@@ -43,3 +43,17 @@ register(
         "dataset_url": "http://rail.eecs.berkeley.edu/datasets/offline_rl/kitchen/kitchen_microwave_kettle_bottomburner_light-v0.hdf5",
     },
 )
+
+register(
+    id="kitchen-microwave-v0",
+    entry_point="d4rl.kitchen.kitchen_envs:KitchenMicrowaveV0",
+    max_episode_steps=50,
+    kwargs={
+        "dense": False,
+        "image_obs": True,
+        "imwidth": 128,
+        "imheight": 128,
+        "control_mode": "end_effector",
+        "frame_skip": 16,
+    },
+)

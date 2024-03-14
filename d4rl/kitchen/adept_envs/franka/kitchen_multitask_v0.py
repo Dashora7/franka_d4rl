@@ -240,9 +240,10 @@ class KitchenV0(robot_env.RobotEnv):
         )
 
         self.init_qvel = self.sim.model.key_qvel[0].copy()
-        obs_upper = 8.0 * np.ones(self.obs_dim)
-        obs_lower = -obs_upper
-        self.observation_space = spaces.Box(obs_lower, obs_upper, dtype=np.float32)
+        if not self.image_obs:
+            obs_upper = 8.0 * np.ones(self.obs_dim)
+            obs_lower = -obs_upper
+            self.observation_space = spaces.Box(obs_lower, obs_upper, dtype=np.float32)
         if self.image_obs:
             self.imlength = imwidth * imheight
             self.imlength *= 3
@@ -255,9 +256,12 @@ class KitchenV0(robot_env.RobotEnv):
             else:
                 self.image_shape = (3, imheight, imwidth)
 
-            self.observation_space = spaces.Box(
-                0, 255, (self.imlength,), dtype=np.uint8
+            import gym
+            self.observation_space = gym.spaces.Dict(
+                {'image': spaces.Box(0, 255, (self.imwidth, self.imheight, 3, 1), dtype=np.uint8)}
             )
+            
+            
             if self.proprioception:
                 obs_upper = 8.0 * np.ones(9 + 7)
                 obs_lower = -obs_upper

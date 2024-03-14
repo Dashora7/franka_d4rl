@@ -5,19 +5,33 @@ import itertools
 from itertools import combinations
 from envs.base_envs import BenchEnv
 from d4rl.kitchen.kitchen_envs import KitchenMicrowaveKettleLightTopLeftBurnerV0
+from d4rl.kitchen.kitchen_envs import KitchenMicrowaveV0, KitchenHingeCabinetV0, KitchenSlideCabinetV0
 
+NAME_TO_ENV = {
+  'microwave': (KitchenMicrowaveV0, 4),
+  'hingecabinet': (KitchenHingeCabinetV0, 3),
+  'slidecabinet': (KitchenSlideCabinetV0, 4)
+}
 
 class KitchenEnv(BenchEnv):
-  def __init__(self, action_repeat=1, use_goal_idx=False, log_per_goal=False,  control_mode='end_effector', width=64):
+  def __init__(self, action_repeat=1, use_goal_idx=True, log_per_goal=False, 
+               control_mode='end_effector', width=128, reward_type='sparse',
+               envname='microwave'):
 
     super().__init__(action_repeat, width)
     self.use_goal_idx = use_goal_idx
     self.log_per_goal = log_per_goal
+    self.reward_type = reward_type
     with self.LOCK:
-      self._env =  KitchenMicrowaveKettleLightTopLeftBurnerV0(frame_skip=16, control_mode = control_mode, imwidth=width, imheight=width)
-
+      # self._env =  KitchenMicrowaveKettleLightTopLeftBurnerV0(frame_skip=16, control_mode = control_mode, imwidth=width, imheight=width)
+      cls = NAME_TO_ENV[envname][0]
+      self._env = cls(frame_skip=16, control_mode = control_mode, imwidth=width, imheight=width)
+      # CUSTOM CAMERA SETTINGS
       self._env.sim_robot.renderer._camera_settings = dict(
-        distance=1.86, lookat=[-0.3, .5, 2.], azimuth=90, elevation=-60)
+        distance=2.2, lookat=[-0.2, .5, 2.], azimuth=70, elevation=-35)
+      
+      #self._env.sim_robot.renderer._camera_settings = dict(
+      #  distance=1.86, lookat=[-0.3, .5, 2.], azimuth=90, elevation=-60)
 
     self.rendered_goal = False
     self._env.reset()
@@ -25,6 +39,7 @@ class KitchenEnv(BenchEnv):
     self.goal_idx = 0
     self.obs_element_goals, self.obs_element_indices, self.goal_configs = get_kitchen_benchmark_goals()
     self.goals = list(range(len(self.obs_element_goals)))
+    self.set_goal_idx(NAME_TO_ENV[envname][1])
 
   def set_goal_idx(self, idx):
     self.goal_idx = idx
@@ -36,8 +51,13 @@ class KitchenEnv(BenchEnv):
     return self.goals
 
   def _get_obs(self, state):
+    
     image = self._env.render('rgb_array', width=self._env.imwidth, height =self._env.imheight)
+    # obs = {'image': image, 'state': state}
+    
     obs = {'image': image, 'state': state, 'image_goal': self.render_goal(), 'goal': self.goal}
+    
+    
     if self.log_per_goal:
       for i, goal_idx in enumerate(self.goals):
         # add rewards for all goals
@@ -55,7 +75,10 @@ class KitchenEnv(BenchEnv):
     total_reward = 0.0
     for step in range(self._action_repeat):
       state, reward, done, info = self._env.step(action)
-      reward = self.compute_reward()
+      if self.reward_type == 'sparse':
+        reward = self.compute_success()[0]
+      else:
+        reward = self.compute_reward()
       total_reward += reward
       if done:
         break
