@@ -57,3 +57,31 @@ register(
         "frame_skip": 16,
     },
 )
+
+register(
+    id="kitchen-hingecabinet-v0",
+    entry_point="d4rl.kitchen.kitchen_envs:KitchenHingeCabinetV0",
+    max_episode_steps=50,
+    kwargs={
+        "dense": False,
+        "image_obs": True,
+        "imwidth": 128,
+        "imheight": 128,
+        "control_mode": "end_effector",
+        "frame_skip": 16,
+    },
+)
+
+register(
+    id="kitchen-slidecabinet-v0",
+    entry_point="d4rl.kitchen.kitchen_envs:KitchenSlideCabinetV0",
+    max_episode_steps=50,
+    kwargs={
+        "dense": False,
+        "image_obs": True,
+        "imwidth": 128,
+        "imheight": 128,
+        "control_mode": "end_effector",
+        "frame_skip": 16,
+    },
+)

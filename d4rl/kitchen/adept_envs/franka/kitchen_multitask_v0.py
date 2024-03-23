@@ -186,9 +186,17 @@ class KitchenV0(robot_env.RobotEnv):
                 **robot_params
             ),
             frame_skip=frame_skip,
+            
+            
             camera_settings=dict(
                 distance=2.2, lookat=[-0.2, 0.5, 2.0], azimuth=70, elevation=-35
             ),
+            
+            
+            #camera_settings=dict(
+            #  distance=1.86, lookat=[-0.3, .5, 2.], azimuth=90, elevation=-60),
+        
+        
         )
         if self.control_mode in ["primitives", "end_effector"]:
             self.reset_mocap_welds(self.sim)
