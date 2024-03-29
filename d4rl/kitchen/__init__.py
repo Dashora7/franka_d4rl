@@ -47,7 +47,7 @@ register(
 register(
     id="kitchen-microwave-v0",
     entry_point="d4rl.kitchen.kitchen_envs:KitchenMicrowaveV0",
-    max_episode_steps=50,
+    max_episode_steps=280,
     kwargs={
         "dense": False,
         "image_obs": True,
@@ -61,7 +61,7 @@ register(
 register(
     id="kitchen-hingecabinet-v0",
     entry_point="d4rl.kitchen.kitchen_envs:KitchenHingeCabinetV0",
-    max_episode_steps=50,
+    max_episode_steps=280,
     kwargs={
         "dense": False,
         "image_obs": True,
@@ -75,7 +75,7 @@ register(
 register(
     id="kitchen-slidecabinet-v0",
     entry_point="d4rl.kitchen.kitchen_envs:KitchenSlideCabinetV0",
-    max_episode_steps=50,
+    max_episode_steps=280,
     kwargs={
         "dense": False,
         "image_obs": True,
