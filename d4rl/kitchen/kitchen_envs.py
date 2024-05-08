@@ -103,8 +103,7 @@ class KitchenBase(KitchenTaskRelaxV1):
             
             #img = self.render(mode="rgb_array",
             #        width=self.imwidth, height=self.imheight)[..., None]
-            
-            img = img.transpose(2, 0, 1).flatten()
+            # img = img.transpose(2, 0, 1).flatten()
             
             if self.proprioception:
                 if not self.initializing:
