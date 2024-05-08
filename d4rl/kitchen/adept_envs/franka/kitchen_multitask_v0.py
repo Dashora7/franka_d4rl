@@ -194,7 +194,7 @@ class KitchenV0(robot_env.RobotEnv):
             
             
             #camera_settings=dict(
-            #  distance=1.86, lookat=[-0.3, .5, 2.], azimuth=90, elevation=-60),
+            #    distance=1.86, lookat=[-0.3, .5, 2.], azimuth=90, elevation=-60),
         
         
         )
@@ -803,7 +803,6 @@ class KitchenV0(robot_env.RobotEnv):
                 if not self.initializing:
                     rotation = self.quat_to_rpy(self.sim.data.body_xquat[10]) - np.array(a[3:6])
                     for _ in range(self.frame_skip):
-                        
                         quat = self.rpy_to_quat(rotation)
                         quat_delta = self.convert_xyzw_to_wxyz(quat) - self.sim.data.body_xquat[10]
                         self._set_action(np.concatenate([ a[:3], quat_delta, [a[-1], -a[-1]] ]))
@@ -878,7 +877,7 @@ class KitchenV0(robot_env.RobotEnv):
 
         self.goal = self._get_task_goal()  # sample a new goal on reset
         self.step_count = 0
-
+        
         if self.sim_robot._use_dm_backend:
             imwidth = self.imwidth
             imheight = self.imheight
