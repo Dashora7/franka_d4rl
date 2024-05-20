@@ -67,11 +67,11 @@ class KitchenBase(KitchenTaskRelaxV1):
         qpos[OBS_ELEMENT_INDICES[goalname]] = OBS_ELEMENT_GOALS[goalname]
         self.set_state(qpos, np.zeros(len(self.init_qvel)))
         
-        # goal_obs = self.render('rgb_array', width=self.imwidth, height=self.imheight)
-        goal_obs = self.sim_robot.renderer.render_offscreen(
+        goal_obs = self.render('rgb_array', width=self.imwidth, height=self.imheight)
+        """goal_obs = self.sim_robot.renderer.render_offscreen(
             self.imwidth,
             self.imheight,
-            camera_id=2)
+            camera_id=2)"""
         
         
         self.set_state(backup_qpos, backup_qvel)
@@ -95,13 +95,13 @@ class KitchenBase(KitchenTaskRelaxV1):
         self.obs_dict["obj_qv"] = obj_qv
         self.obs_dict["goal"] = self.goal
         if self.image_obs:
-            img = self.sim_robot.renderer.render_offscreen(
+            """img = self.sim_robot.renderer.render_offscreen(
                 self.imwidth,
                 self.imheight,
-                camera_id=2)[..., None]
+                camera_id=2)[..., None]"""
             
-            #img = self.render(mode="rgb_array",
-            #        width=self.imwidth, height=self.imheight)[..., None]
+            img = self.render(mode="rgb_array",
+                    width=self.imwidth, height=self.imheight)[..., None]
             
             # img = img.transpose(2, 0, 1).flatten()
             
