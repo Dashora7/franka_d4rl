@@ -859,11 +859,11 @@ class KitchenV0(robot_env.RobotEnv):
         self.obs_dict["obj_qv"] = obj_qv
         self.obs_dict["goal"] = self.goal
         if self.image_obs:
-            img = self.sim_robot.renderer.render_offscreen(
-                self.imwidth,
-                self.imheight,
-                camera_id=2)[..., None]
-            # img = self.render(mode="rgb_array", width=self.imwidth, height=self.imheight)
+            #img = self.sim_robot.renderer.render_offscreen(
+            #    self.imwidth,
+            #    self.imheight,
+            #    camera_id=2)[..., None]
+            img = self.render(mode="rgb_array", width=self.imwidth, height=self.imheight)
             # img = img.transpose(2, 0, 1).flatten()
             return img
         else:
