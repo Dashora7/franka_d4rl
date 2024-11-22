@@ -53,8 +53,8 @@ register(
         "image_obs": True,
         "imwidth": 128,
         "imheight": 128,
-        "control_mode": "end_effector",
-        "frame_skip": 16,
+        "control_mode": "joint_velocity",
+        "frame_skip": 40,
     },
 )
 
@@ -67,8 +67,8 @@ register(
         "image_obs": True,
         "imwidth": 128,
         "imheight": 128,
-        "control_mode": "end_effector",
-        "frame_skip": 16,
+        "control_mode": "joint_velocity",
+        "frame_skip": 40,
     },
 )
 
@@ -81,7 +81,7 @@ register(
         "image_obs": True,
         "imwidth": 128,
         "imheight": 128,
-        "control_mode": "end_effector",
-        "frame_skip": 16,
+        "control_mode": "joint_velocity",
+        "frame_skip": 40,
     },
 )

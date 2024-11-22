@@ -19,7 +19,7 @@ OBS_ELEMENT_GOALS = {
     "top left burner": np.array([-0.92, -0.01]),
     "light switch": np.array([-0.69, -0.05]),
     "slide cabinet": np.array([0.37]),
-    "hinge cabinet": np.array([0.0, 1.45]),
+    "hinge cabinet": np.array([0.0, -1.0]),
     "microwave": np.array([-0.75]),
     "kettle": np.array([-0.23, 0.75, 1.62, 0.99, 0.0, 0.0, -0.06]),
 }
